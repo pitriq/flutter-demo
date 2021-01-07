@@ -1,7 +1,10 @@
-import 'package:demo/models/todo.dart';
-import 'package:demo/screens/new_todo_screen.dart';
-import 'package:demo/widgets/todo_item.dart';
 import 'package:flutter/material.dart';
+
+import 'package:demo/models/todo.dart';
+import 'package:demo/screens/basic_screen.dart';
+import 'package:demo/screens/new_todo_screen.dart';
+import 'package:demo/utils/navigate.dart';
+import 'package:demo/widgets/todo_item.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,77 +12,77 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  List<Todo> todos = [];
-
-  @override
-  void initState() {
-    todos.add(Todo(text: 'Un TODO de prueba', completed: false));
-    todos.add(Todo(text: 'Otro TODO de prueba', completed: false));
-    todos.add(Todo(text: 'Otro TODO de prueba más', completed: false));
-    super.initState();
-  }
+  List<Todo> todos = [
+    Todo(text: 'Comprar yerba Nobleza Gaucha'),
+    Todo(text: 'Comprar azucar'),
+    Todo(text: 'No ponerle esa azucar al mate'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: _onFabPressed,
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: SafeArea(
-          child: Column(
-            children: [
-              Text(
-                'My TODOs',
-                style: TextStyle(
-                  fontSize: 28,
-                  color: Colors.grey[900],
+    final theme = Theme.of(context);
+
+    return BasicScreen(
+      fab: _buildFab(),
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    'My TODOs',
+                    style: theme.textTheme.headline2,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: todos.length,
-                  itemBuilder: (context, index) {
-                    return TodoItem(
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 20),
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: TodoItem(
                       todo: todos[index],
-                      onChanged: (value) => _onTodoChecked(index),
-                    );
-                  },
-                ),
-              )
-            ],
-          )
+                      onToggled: (value) => _onTodoChecked(index),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildFab() {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: _onFabPressed,
     );
   }
 
   void _onTodoChecked(index) {
     final todo = todos[index];
     setState(() {
-      todo.completed = !todo.completed;
+      todo.toggleCompleted();
     });
   }
 
   void _addNewTodo(String name) {
     setState(() {
-      todos.add(Todo(text: name, completed: false));
+      todos.add(Todo(text: name));
     });
   }
 
   void _onFabPressed() async {
-    final newTodoName = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewTodoScreen()
-      )
-    );
+    final newTodoName = await push(context, NewTodoScreen());
     if (newTodoName == null) return;
     _addNewTodo(newTodoName);
   }
-
 }

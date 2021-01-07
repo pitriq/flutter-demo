@@ -1,53 +1,41 @@
-import 'package:demo/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:demo/utils/navigate.dart';
+import 'package:demo/screens/basic_screen.dart';
+import 'package:demo/screens/home_screen.dart';
+
 class SplashScreen extends StatelessWidget {
-  void _navigateToHomeScreen(BuildContext context) {
+  void _goToHomeScreen(BuildContext context) {
+    final delay = Duration(seconds: 3);
     Future.delayed(
-      Duration(seconds: 3),
-      () => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      ),
+      delay,
+      () => navigate(context, HomeScreen()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    _navigateToHomeScreen(context);
+    _goToHomeScreen(context);
 
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'DEMO',
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.purple,
-                  ),
-                ),
-                Divider(
-                  thickness: 3,
-                  color: Colors.purple,
-                ),
-                Text(
-                  'An app to write your TODOs',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+    final theme = Theme.of(context);
+
+    return BasicScreen(
+      child: Padding(
+        padding: EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'DEMO',
+              style: theme.textTheme.headline1,
             ),
-          ),
+            Divider(thickness: 2),
+            Text(
+              'An app to write your TODOs',
+              style: theme.textTheme.bodyText1,
+            ),
+          ],
         ),
       ),
     );
