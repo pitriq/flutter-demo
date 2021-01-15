@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Todo> todos = [
     Todo(text: 'Comprar yerba Nobleza Gaucha'),
     Todo(text: 'Comprar azucar'),
-    Todo(text: 'No ponerle esa azucar al mate'),
+    Todo(text: 'No ponerle esa azucar al mate porfa'),
   ];
 
   @override
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: TodoItem(
                       todo: todos[index],
-                      onToggled: (value) => _onTodoChecked(index),
+                      onPressed: () => _onTodoPressed(index),
                     ),
                   );
                 },
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onTodoChecked(index) {
+  void _onTodoPressed(int index) {
     final todo = todos[index];
     setState(() {
       todo.toggleCompleted();
