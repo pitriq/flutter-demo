@@ -6,8 +6,9 @@ import 'package:demo/widgets/todo_checkbox.dart';
 class TodoItem extends StatelessWidget {
   final Todo todo;
   final VoidCallback onPressed;
+  final VoidCallback onLongPressed;
 
-  TodoItem({this.todo, this.onPressed});
+  TodoItem({this.todo, this.onPressed, this.onLongPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class TodoItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onPressed,
+      onLongPress: onLongPressed,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

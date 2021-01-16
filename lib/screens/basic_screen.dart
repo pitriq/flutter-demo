@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BasicScreen extends StatelessWidget {
-  final FloatingActionButton fab;
+  final Widget fab;
   final Widget child;
 
   const BasicScreen({

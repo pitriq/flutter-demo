@@ -1,5 +1,11 @@
+import 'package:demo/providers/todos_api_provider.dart';
+import 'package:demo/repositories/todos_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+
+import 'package:provider/provider.dart';
 
 import 'package:demo/utils/palette.dart';
 import 'package:demo/screens/splash_screen.dart';
@@ -13,7 +19,16 @@ void main() {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) {
+        final httpClient = http.Client();
+        final todosApiProvider = TodosApiProvider(httpClient);
+        return TodosRepository(todosApiProvider);
+      },
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:demo/models/todo.dart';
+import 'package:demo/repositories/todos_repository.dart';
 import 'package:demo/screens/basic_screen.dart';
 import 'package:demo/screens/new_todo_screen.dart';
 import 'package:demo/utils/navigate.dart';
 import 'package:demo/widgets/todo_item.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<Todo> todos = [
-    Todo(text: 'Comprar yerba Nobleza Gaucha'),
-    Todo(text: 'Comprar azucar'),
-    Todo(text: 'No ponerle esa azucar al mate porfa'),
-  ];
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final repository = Provider.of<TodosRepository>(context);
 
     return BasicScreen(
-      fab: _buildFab(),
+      fab: _buildFab(context),
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -42,13 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.only(top: 20),
-                itemCount: todos.length,
+                itemCount: repository.todos.length,
                 itemBuilder: (context, index) {
+                  final todo = repository.todos[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: TodoItem(
-                      todo: todos[index],
-                      onPressed: () => _onTodoPressed(index),
+                      todo: todo,
+                      onPressed: () => _onTodoPressed(context, todo),
+                      onLongPressed: () => _onLongTodoPressed(context, todo),
                     ),
                   );
                 },
@@ -60,29 +55,58 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFab() {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: _onFabPressed,
+  Widget _buildFab(BuildContext context) {
+    final repository = Provider.of<TodosRepository>(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton(
+          heroTag: UniqueKey(),
+          mini: true,
+          child: _buildRandomFabContent(context),
+          onPressed: () => repository.addRandomTodo(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: FloatingActionButton(
+            heroTag: UniqueKey(),
+            child: Icon(Icons.add),
+            onPressed: () => _onFabPressed(context),
+          ),
+        ),
+      ],
     );
   }
 
-  void _onTodoPressed(int index) {
-    final todo = todos[index];
-    setState(() {
-      todo.toggleCompleted();
-    });
+  Widget _buildRandomFabContent(BuildContext context) {
+    final repository = Provider.of<TodosRepository>(context);
+    if (repository.loading) {
+      return SizedBox(
+        height: 10,
+        width: 10,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.white),
+          strokeWidth: 2,
+        ),
+      );
+    }
+    return Icon(Icons.shuffle);
   }
 
-  void _addNewTodo(String name) {
-    setState(() {
-      todos.add(Todo(text: name));
-    });
+  void _onTodoPressed(BuildContext context, Todo todo) {
+    final repository = Provider.of<TodosRepository>(context, listen: false);
+    repository.toggleTodo(todo);
   }
 
-  void _onFabPressed() async {
+  void _onLongTodoPressed(BuildContext context, Todo todo) {
+    final repository = Provider.of<TodosRepository>(context, listen: false);
+    repository.removeTodo(todo);
+  }
+
+  void _onFabPressed(BuildContext context) async {
+    final repository = Provider.of<TodosRepository>(context, listen: false);
     final newTodoName = await push(context, NewTodoScreen());
     if (newTodoName == null) return;
-    _addNewTodo(newTodoName);
+    repository.addTodo(Todo(text: newTodoName));
   }
 }
