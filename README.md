@@ -60,10 +60,14 @@
 ## 🎁 Packages
 
 * Cómo introducirlos en nuestra aplicación
-* Algunas tools como [pubspec assist](https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist)
+* Podemos usar algunas tools como [pubspec assist](https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist)
 * [dio](https://pub.dev/packages/dio), [http](https://pub.dev/packages/http)
 
-## 🌐 Acceder a APIs y manejar state con provider
-* Cómo hacer http requests
+## 💉 Manejar state con ValueNotifier e inyectarlo con provider
 * [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html)s
 * [provider](https://pub.dev/packages/provider)
+
+## 🌐 Acceder a APIs
+* Cómo hacer http requests
+* Cómo hacer un provider que consuma un API
+* Vamos a usar [JSONPlaceholder](https://jsonplaceholder.typicode.com/)
