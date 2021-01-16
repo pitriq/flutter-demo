@@ -63,8 +63,8 @@
 * Podemos usar algunas tools como [pubspec assist](https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist)
 * [dio](https://pub.dev/packages/dio), [http](https://pub.dev/packages/http)
 
-## 💉 Manejar state con ValueNotifier e inyectarlo con provider
-* [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html)s
+## 💉 Manejar state con ChangeNotifier e inyectarlo con provider
+* [ChangeNotifier](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple#changenotifier)
 * [provider](https://pub.dev/packages/provider)
 
 ## 🌐 Acceder a APIs
